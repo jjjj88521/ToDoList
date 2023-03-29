@@ -127,11 +127,15 @@ body main .todo-list .todo .toggle {
   margin: 1rem;
   cursor: pointer;
 }
-body main .todo-list .todo span {
+body main .todo-list .todo span.todo-title {
   font-size: 1.5rem;
   color: black;
   text-decoration: none;
   cursor: default;
+}
+body main .todo-list .todo span.todo-title.done {
+  color: gray;
+  text-decoration: line-through;
 }
 body main .todo-list .todo button.trash {
   border: none;

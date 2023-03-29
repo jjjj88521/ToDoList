@@ -63,13 +63,10 @@ newTodo.addEventListener("keyup", (e) => {
 
 // 代辦事項打勾 文字內容就槓掉
 todoListDiv.addEventListener("change", function (e) {
-  // 用兄弟節點找到 span 文字內容
-  const text = e.target.nextElementSibling;
-  // 如果對應的資料的completed屬性為false就槓掉 否則設定空字串(預設值)
-  text.style.textDecorationLine = !dataArr[e.target.dataset.id].completed
-    ? "line-through"
-    : "";
-  text.style.color = !dataArr[e.target.dataset.id].completed ? "gray" : "";
+  const span = document.querySelectorAll(".todo-title");
+  // 對應的資料槓掉或恢復
+  // console.log(e);
+  span[e.target.dataset.id].classList.toggle("done");
   dataArr[e.target.dataset.id].completed =
     !dataArr[e.target.dataset.id].completed;
   countTodo();
@@ -87,6 +84,16 @@ todoListDiv.addEventListener("click", function (e) {
   }
 });
 
+// 按下顯示全部 已完成 待完成按鈕 渲染對應的資料
+const listBtn = document.querySelector(".filter");
+console.log(listBtn.children);
+listBtn.childNodes.forEach((ele) => {
+  ele.addEventListener("click", (e) => {
+    console.log(e.target);
+    e.target.classList.toggle("selected");
+  });
+});
+
 function renderList() {
   // 清空 為了重新渲染
   todoListDiv.innerHTML =
@@ -96,7 +103,7 @@ function renderList() {
     todoDiv.classList.add("todo");
     todoDiv.innerHTML = `
           <input class="toggle" type="checkbox" data-id=${i} />
-          <span>${dataArr[i].title}</span>
+          <span class="todo-title">${dataArr[i].title}</span>
           <button class="trash" data-id=${i}>
             <i class="fas fa-trash"></i>
           </button>
