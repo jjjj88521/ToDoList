@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do List</title>
+
+    <!-- font-awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+      integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&family=Baloo+2&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CSS style -->
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>To-do List</h1>
+    </header>
+    <main>
+      <section class="input">
+        <input class="new-todo" type="text" placeholder="要做什麼事..." />
+        <button class="plus-btn">
+          <i class="fas fa-plus-square"></i>
+        </button>
+      </section>
+      <section class="todo-count">
+        <span>還有3件事沒做完</span>
+      </section>
+      <section class="todo-list">
+        <div class="todo">
+          <input class="toggle" type="checkbox" />
+          <span>要做的事</span>
+          <button class="trash">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </section>
+      <section class="buttons">
+        <div class="filter">
+          <button class="btn all selected">全部事項</button>
+          <button class="btn active">待完成</button>
+          <button class="btn completed">已完成</button>
+        </div>
+        <button class="btn clear-completed">清除完成事項</button>
+      </section>
+    </main>
+    <script src="./js/app.js"></script>
+  </body>
+</html>
