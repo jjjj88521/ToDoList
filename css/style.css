@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   font-weight: normal;
+  font-family: "Baloo 2", "Noto Sans TC", sans-serif;
 }
 
 ul {
@@ -36,12 +37,11 @@ a {
 }
 
 body {
-  background-color: #272727;
+  background-color: rgba(39, 39, 39, 0.9607843137);
   color: white;
-  font-family: "Baloo 2", "Noto Sans TC", sans-serif;
 }
 body header {
-  height: 100px;
+  height: 80px;
   box-shadow: 0 6px 6px 4px black;
 }
 body header h1 {
@@ -54,14 +54,14 @@ body main {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border: 1px solid white;
 }
 body main .input {
-  border: 1px solid pink;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50%;
+  width: 800px;
+  max-width: 70%;
+  margin-top: 1rem;
 }
 body main .input .new-todo {
   padding: 16px;
@@ -88,13 +88,23 @@ body main .input button.plus-btn i:hover {
 body main .todo-count {
   margin: 20px;
 }
+body main .todo-count span {
+  font-size: 1.5rem;
+}
 body main .todo-list {
   border: 3px solid red;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  width: 50%;
+  width: 800px;
+  max-width: 70%;
+  min-height: 50px;
+  margin: 1rem 0;
+}
+body main .todo-list .no-todo {
+  color: gray;
+  margin: auto;
 }
 body main .todo-list .todo {
   display: flex;
@@ -103,17 +113,25 @@ body main .todo-list .todo {
   border-radius: 10px;
   background-color: #c5e1e6;
   width: 100%;
-  margin: 0.5rem;
+  margin: 0.75rem;
+  box-shadow: 3px 3px 3px 2px black;
+  transition: all 0.2s ease;
+}
+body main .todo-list .todo:hover {
+  transform: translateY(-5px);
 }
 body main .todo-list .todo .toggle {
   width: 2rem;
   height: 2rem;
   border-radius: 10px;
   margin: 1rem;
+  cursor: pointer;
 }
 body main .todo-list .todo span {
   font-size: 1.5rem;
   color: black;
+  text-decoration: none;
+  cursor: default;
 }
 body main .todo-list .todo button.trash {
   border: none;
@@ -135,10 +153,9 @@ body main .todo-list .todo button.trash:hover {
   transform: scale(1.3);
 }
 body main .buttons {
-  border: 1px solid pink;
-  margin: 10px;
+  width: 50%;
+  margin-top: 2rem;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 }/*# sourceMappingURL=style.css.map */
