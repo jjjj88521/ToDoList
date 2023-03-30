@@ -28,6 +28,8 @@ addBtn.addEventListener("click", () => {
     // 將物件 push 進 dataArr
     dataArr.push(todoObj);
     console.log(dataArr);
+    // 放進localStorage
+    localStorage.setItem("todo-data", JSON.stringify(dataArr));
     // 清空input
     newTodo.value = "";
 
@@ -51,6 +53,8 @@ newTodo.addEventListener("keyup", (e) => {
       // 將物件 push 進 dataArr
       dataArr.push(todoObj);
       console.log(dataArr);
+      // 放進localStorage
+      localStorage.setItem("todo-data", JSON.stringify(dataArr));
       // 清空input
       newTodo.value = "";
 
@@ -69,6 +73,8 @@ todoListDiv.addEventListener("change", function (e) {
   span[e.target.dataset.id].classList.toggle("done");
   dataArr[e.target.dataset.id].completed =
     !dataArr[e.target.dataset.id].completed;
+  // 放進localStorage
+  localStorage.setItem("todo-data", JSON.stringify(dataArr));
   countTodo();
 });
 
@@ -78,6 +84,8 @@ todoListDiv.addEventListener("click", function (e) {
     // console.log(e.target);
     // 刪除相對應的事項
     dataArr.splice(e.target.dataset.id, 1);
+    // 放進localStorage
+    localStorage.setItem("todo-data", JSON.stringify(dataArr));
     // 渲染
     renderList();
     countTodo();
@@ -94,6 +102,33 @@ listBtn.childNodes.forEach((ele) => {
   });
 });
 
+// 清除按鈕
+const cleanBtns = document.querySelector(".clean-btns");
+cleanBtns.addEventListener("click", (e) => {
+  console.log(e.target.className);
+  if (e.target.className.includes("clean-all")) {
+    dataArr.splice(0);
+    // 放進localStorage
+    localStorage.removeItem("todo-data");
+    // 渲染
+    renderList();
+    countTodo();
+  } else {
+    dataArr.forEach((ele, index) => {
+      // dataArr = ele.completed === true ? dataArr.splice(index, 1) : dataArr;
+      if (ele.completed) {
+        dataArr.splice(index, 1);
+        // 放進localStorage
+        localStorage.setItem("todo-data", JSON.stringify(dataArr));
+        // 渲染
+        renderList();
+        countTodo();
+        console.log(index);
+      }
+    });
+  }
+});
+
 function renderList() {
   // 清空 為了重新渲染
   todoListDiv.innerHTML =
@@ -101,13 +136,22 @@ function renderList() {
   for (let i = 0; i < dataArr.length; i++) {
     const todoDiv = document.createElement("div");
     todoDiv.classList.add("todo");
-    todoDiv.innerHTML = `
-          <input class="toggle" type="checkbox" data-id=${i} />
-          <span class="todo-title">${dataArr[i].title}</span>
+
+    todoDiv.innerHTML = dataArr[i].completed
+      ? `
+          <input class="toggle" type="checkbox" data-id=${i} checked />
+          <span class="todo-title done">${dataArr[i].title}</span>
           <button class="trash" data-id=${i}>
             <i class="fas fa-trash"></i>
           </button>
-        `;
+        `
+      : `
+        <input class="toggle" type="checkbox" data-id=${i} />
+        <span class="todo-title">${dataArr[i].title}</span>
+        <button class="trash" data-id=${i}>
+          <i class="fas fa-trash"></i>
+        </button>
+      `;
     todoListDiv.appendChild(todoDiv);
   }
 }
@@ -120,5 +164,6 @@ function countTodo() {
   dataArr.forEach((e) => {
     c = e.completed ? c : c + 1;
   });
-  todoP.innerHTML = `<span>還有${c}件事沒做完</span>`;
+  todoP.innerHTML =
+    c === 0 ? `<span>做完了ㄟ</span>` : `<span>還有${c}件事沒做完</span>`;
 }
