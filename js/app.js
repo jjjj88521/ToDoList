@@ -108,23 +108,18 @@ todoListDiv.addEventListener("click", function (e) {
 });
 
 // 按下顯示全部 已完成 待完成按鈕 渲染對應的資料
-const listBtn = document.querySelector(".filter").childNodes;
+const listBtn = document.querySelector(".filter");
 console.log(listBtn.children);
-listBtn.forEach((ele) => {
+listBtn.childNodes.forEach((ele) => {
   ele.addEventListener("click", function (e) {
-    // 選擇哪個按鈕 哪個就亮起來
-    listBtn.forEach((ele) => {
-      console.log(ele);
-      // ele.classList.remove("selected");
-      if (ele.tagName === "BUTTON") ele.classList.remove("selected");
-    });
-    e.preventDefault();
+    // 按鈕切換
+    listBtn.querySelector(".selected").classList.remove("selected");
+    this.classList.add("selected");
+    // 顯示選擇的清單
     if (this.className.includes("all")) {
-      this.classList.add("selected");
       renderList(dataArr);
       countTodo();
     } else if (this.className.includes("active")) {
-      this.classList.add("selected");
       let newArr = [];
       dataArr.forEach((e) => {
         if (e.completed === false) {
@@ -134,7 +129,6 @@ listBtn.forEach((ele) => {
       renderList(newArr);
       countTodo();
     } else {
-      this.classList.add("selected");
       let newArr = [];
       dataArr.forEach((e) => {
         if (e.completed === true) {
@@ -196,7 +190,7 @@ cleanBtns.addEventListener("click", (e) => {
 function renderList(dataArr) {
   // 清空 為了重新渲染
   todoListDiv.innerHTML =
-    dataArr.length === 0 ? `<p class="no-todo">沒事情了耶！！！！</p>` : "";
+    dataArr.length === 0 ? `<p class="no-todo">沒東西</p>` : "";
   for (let i = 0; i < dataArr.length; i++) {
     const todoDiv = document.createElement("div");
     todoDiv.classList.add("todo");
