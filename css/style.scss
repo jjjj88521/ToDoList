@@ -5,6 +5,7 @@
   box-sizing: border-box;
   font-weight: normal;
   font-family: "Baloo 2", "Noto Sans TC", sans-serif;
+  scroll-behavior: smooth;
 }
 
 ul {
@@ -35,6 +36,22 @@ a {
   &.selected {
     background-color: white;
     color: black;
+  }
+}
+
+html {
+  overflow-y: overlay;
+  &::-webkit-scrollbar {
+    // display: none;
+    background-color: transparent;
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 10px;
+    &:hover {
+      background: white;
+    }
   }
 }
 
@@ -182,5 +199,23 @@ body {
       justify-content: space-evenly;
       align-items: center;
     }
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleDown {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0);
   }
 }

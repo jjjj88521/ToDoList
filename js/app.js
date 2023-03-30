@@ -12,7 +12,7 @@ const dataArr = localStorage.getItem("todo-data")
 // 獲取 todo-list 區塊
 const todoListDiv = document.querySelector(".todo-list");
 // 一開始先渲染一次
-renderList();
+renderList(dataArr);
 countTodo();
 // 加號按下去就輸入
 addBtn.addEventListener("click", () => {
@@ -27,15 +27,21 @@ addBtn.addEventListener("click", () => {
     };
     // 將物件 push 進 dataArr
     dataArr.push(todoObj);
-    console.log(dataArr);
+    // console.log(dataArr);
     // 放進localStorage
     localStorage.setItem("todo-data", JSON.stringify(dataArr));
     // 清空input
     newTodo.value = "";
+    // 動畫
+    scaleUp();
 
     // 渲染頁面
-    renderList();
+    renderList(dataArr);
     countTodo();
+
+    //動畫
+    // todoListDiv.lastChild.style.animation = "scaleUp 0.5s ease forwards";
+    scaleUp();
   }
 });
 // enter按下去也輸入
@@ -52,15 +58,20 @@ newTodo.addEventListener("keyup", (e) => {
       };
       // 將物件 push 進 dataArr
       dataArr.push(todoObj);
-      console.log(dataArr);
+      // console.log(dataArr);
       // 放進localStorage
       localStorage.setItem("todo-data", JSON.stringify(dataArr));
       // 清空input
       newTodo.value = "";
 
+      // console.log(todoListDiv.lastChild);
       // 渲染頁面
-      renderList();
+      renderList(dataArr);
       countTodo();
+
+      //動畫
+      // todoListDiv.lastChild.style.animation = "scaleUp 0.5s ease forwards";
+      scaleUp();
     }
   }
 });
@@ -81,55 +92,108 @@ todoListDiv.addEventListener("change", function (e) {
 // 按下垃圾 刪掉相對應的事項
 todoListDiv.addEventListener("click", function (e) {
   if (e.target.tagName === "BUTTON") {
-    // console.log(e.target);
-    // 刪除相對應的事項
-    dataArr.splice(e.target.dataset.id, 1);
-    // 放進localStorage
-    localStorage.setItem("todo-data", JSON.stringify(dataArr));
-    // 渲染
-    renderList();
-    countTodo();
+    // console.log(e.target.parentNode);
+    e.target.parentElement.style.animation = "scaleDown 0.5s ease forwards";
+    // 動畫結束再刪資料跟渲染
+    e.target.parentElement.addEventListener("animationend", () => {
+      // 刪除相對應的事項
+      dataArr.splice(e.target.dataset.id, 1);
+      // 放進localStorage
+      localStorage.setItem("todo-data", JSON.stringify(dataArr));
+      // 渲染
+      renderList(dataArr);
+      countTodo();
+    });
   }
 });
 
 // 按下顯示全部 已完成 待完成按鈕 渲染對應的資料
-const listBtn = document.querySelector(".filter");
+const listBtn = document.querySelector(".filter").childNodes;
 console.log(listBtn.children);
-listBtn.childNodes.forEach((ele) => {
-  ele.addEventListener("click", (e) => {
-    console.log(e.target);
-    e.target.classList.toggle("selected");
+listBtn.forEach((ele) => {
+  ele.addEventListener("click", function (e) {
+    // 選擇哪個按鈕 哪個就亮起來
+    listBtn.forEach((ele) => {
+      console.log(ele);
+      // ele.classList.remove("selected");
+      if (ele.tagName === "BUTTON") ele.classList.remove("selected");
+    });
+    e.preventDefault();
+    if (this.className.includes("all")) {
+      this.classList.add("selected");
+      renderList(dataArr);
+      countTodo();
+    } else if (this.className.includes("active")) {
+      this.classList.add("selected");
+      let newArr = [];
+      dataArr.forEach((e) => {
+        if (e.completed === false) {
+          newArr.push(e);
+        }
+      });
+      renderList(newArr);
+      countTodo();
+    } else {
+      this.classList.add("selected");
+      let newArr = [];
+      dataArr.forEach((e) => {
+        if (e.completed === true) {
+          newArr.push(e);
+        }
+      });
+      renderList(newArr);
+      countTodo();
+    }
   });
 });
 
 // 清除按鈕
 const cleanBtns = document.querySelector(".clean-btns");
 cleanBtns.addEventListener("click", (e) => {
-  console.log(e.target.className);
+  // console.log(e.target.className);
   if (e.target.className.includes("clean-all")) {
-    dataArr.splice(0);
-    // 放進localStorage
-    localStorage.removeItem("todo-data");
-    // 渲染
-    renderList();
-    countTodo();
+    todoListDiv.childNodes.forEach((ele) => {
+      ele.style.animation = "scaleDown 0.5s ease forwards";
+    });
+    setTimeout(() => {
+      // todoList.childN
+      dataArr.splice(0);
+      // 放進localStorage
+      localStorage.removeItem("todo-data");
+      // 渲染
+      renderList(dataArr);
+      countTodo();
+    }, 500);
   } else {
+    // console.log(todoList.childNodes);
+    // console.log(dataArr);
     dataArr.forEach((ele, index) => {
-      // dataArr = ele.completed === true ? dataArr.splice(index, 1) : dataArr;
       if (ele.completed) {
-        dataArr.splice(index, 1);
-        // 放進localStorage
-        localStorage.setItem("todo-data", JSON.stringify(dataArr));
-        // 渲染
-        renderList();
-        countTodo();
-        console.log(index);
+        // console.log(todoList.childNodes[index]);
+        const done = todoListDiv.childNodes[index];
+        done.style.animation = "scaleDown 0.5s ease forwards";
       }
     });
+    // 動畫結束再移除資料
+    setTimeout(() => {
+      dataArr.forEach((ele, index) => {
+        if (ele.completed) {
+          // 移除對應資料
+          dataArr.splice(index, 1);
+          // 對應的資料移除動畫
+          // 放進localStorage
+          localStorage.setItem("todo-data", JSON.stringify(dataArr));
+        }
+      });
+      // 渲染
+      renderList(dataArr);
+      countTodo();
+      // console.log(index);
+    }, 500);
   }
 });
 
-function renderList() {
+function renderList(dataArr) {
   // 清空 為了重新渲染
   todoListDiv.innerHTML =
     dataArr.length === 0 ? `<p class="no-todo">沒事情了耶！！！！</p>` : "";
@@ -153,6 +217,7 @@ function renderList() {
         </button>
       `;
     todoListDiv.appendChild(todoDiv);
+    // todoDiv.style.animation = "scaleUp 0.5s ease forwards";
   }
 }
 
@@ -167,3 +232,28 @@ function countTodo() {
   todoP.innerHTML =
     c === 0 ? `<span>做完了ㄟ</span>` : `<span>還有${c}件事沒做完</span>`;
 }
+
+// 新增 todo 動畫
+function scaleUp() {
+  todoListDiv.lastChild.style.animation = "scaleUp 0.5s ease forwards";
+  // 滾到最下面
+  window.scrollTo(0, document.body.scrollHeight);
+  // 動畫結束就清掉 style
+  todoListDiv.lastChild.addEventListener("animationend", () => {
+    todoListDiv.lastChild.style.animation = "";
+  });
+}
+
+// const dc = document.querySelector("html");
+// const style = document.createElement("style");
+// style.innerHTML = `
+// html::-webkit-scrollbar {
+//     display: block;
+//     background-color: transparent;
+//     width: 10px;
+//   }
+// `;
+// // console.log(scrollbarStyle.display);
+// window.addEventListener("scroll", () => {
+//   dc.appendChild(style);
+// });
